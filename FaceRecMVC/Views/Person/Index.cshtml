@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div class="form-horizontal">
+
+    <div class="form-group">
+        <label class="control-label col-md-2">Person Group</label>
+        <div class="col-md-10">
+            @Html.DropDownList("PersonGroupID", (IEnumerable<SelectListItem>)ViewBag.PersonGroups, new { ID= "PersonGroupID", onchange="searchPersons()", htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Data</th>
+            <th>Face Count</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="personsList">
+    </tbody>
+ </table>
+
+<div id="dialog-confirm" title="Delete Person" style="display:none">
+    <p>
+        Are you sure you want to delete the Person named <b id="personName"></b>?
+    </p>
+</div>
+
+@section Scripts {
+    <script>
+        function searchPersons() {
+            var personGroupID = $("#PersonGroupID").val();
+            $.getJSON('@Url.Action("GetPersons", "Person")/?personGroupID=' + personGroupID,
+                function (data) {
+                    $("#personsList").empty();
+
+                    $("#personsList").html(data.View);
+                });
+        }
+
+        function promptDelete(personGroupID, personID, personName) {
+            $("#personName").text(personName);
+
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                height: "auto",
+                width: 400,
+                modal: true,
+                buttons: {
+                    "Accept": function () {
+                        $.getJSON("@Url.Action("Delete", "Person")/?PersonGroupID=" + personGroupID + "&PersonID=" + personID, function (data) {
+                            if (data.ok) {
+                                searchPersons();
+                                $("#dialog-confirm").dialog("close");
+                            } else {
+                                if (data.error) {
+                                    alert("Error: " + data.error);
+                                } else {
+                                    alert('Unexpected error.');
+                                }
+                            }
+
+                        });
+                    },
+                    "Cancel": function () {
+                        $("#dialog-confirm").dialog("close");
+                    }
+                }
+            });
+        }
+    </script>
+}

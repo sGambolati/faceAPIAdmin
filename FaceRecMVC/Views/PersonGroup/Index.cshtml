@@ -1,0 +1,73 @@
+﻿@model IEnumerable<FaceRecMVC.Models.PersonGroup>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TrainState)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @item.TrainState
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Train", "Train", new { id = item.Id }) |
+            <a href="#" onclick="promptDelete('@item.Id', '@item.Name')">Delete</a>
+        </td>
+    </tr>
+}
+</table>
+
+<div id="dialog-confirm" title="Delete Person Group" style="display:none">
+    <p>
+        Are you sure you want to delete the Person Group for <b id="personGroup"></b>?
+    </p>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function promptDelete(id, personGroupName) {
+            $("#personGroup").text(personGroupName);
+
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                height: "auto",
+                width: 400,
+                modal: true,
+                buttons: {
+                    "Accept": function () {
+                        document.location = '/PersonGroup/Delete/' + id;
+                    },
+                    "Cancel": function () {
+                        $("#dialog-confirm").dialog("close");
+                    }
+                }
+            });
+        }
+    </script>
+}

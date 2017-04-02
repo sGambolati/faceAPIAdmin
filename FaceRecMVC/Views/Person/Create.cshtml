@@ -1,0 +1,93 @@
+﻿@model FaceRecMVC.Models.Person
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@*<form action="" method="post" enctype="multipart/form-data">
+
+</form>*@
+@using (Html.BeginForm("Create", "Person", FormMethod.Post, new { enctype = "multipart/form-data" })) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Person</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.PersonGroupID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.PersonGroupID, (IEnumerable<SelectListItem>)ViewBag.PersonGroups, new { ID = "PersonGroupID", onchange = "searchPersons()", htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PersonGroupID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CompleteName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CompleteName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CompleteName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Data, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Data, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Data, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <a href="#" onclick="addFileRow()">Add file</a>
+
+        <table id="fileRows" class="table">
+            <thead>
+                <tr>
+                    <th>Pick a file</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" multiple />
+            </div>
+        </div>
+    </div>
+}
+
+<div id="fileRowTemplate">
+    <table>
+        <tr>
+            <td>
+                <input type="file" name="fileRow" id="fileRow" />
+            </td>
+            <td><p>test</p></td>
+        </tr>
+    </table>
+</div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+@section Scripts {
+    <script>
+        $("#fileRowTemplate").hide();
+
+        var fileCount = 0;
+        function addFileRow() {
+            $("#fileRows > tbody").append($("#fileRowTemplate > table > tbody").html());
+
+            $("#fileRows > tbody input[type=file]:last-child").setAttr("id", "fileRow_" + fileCount++);
+        }
+    </script>    
+}

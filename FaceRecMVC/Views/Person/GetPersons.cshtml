@@ -1,0 +1,18 @@
+﻿@{
+    Layout = null;
+}
+
+@ViewBag.PersonGroupID
+
+@foreach (var item in (ViewData.Model as IEnumerable<FaceRecMVC.Models.Person>)){
+    <tr>
+        <td>@item.Id</td>
+        <td>@item.CompleteName</td>
+        <td>@item.Data</td>
+        <td>@item.FaceCount</td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { PersonGroupID = ViewBag.PersonGroupID, PersonID = item.Id }) |
+            <a href="#" onclick="promptDelete('@ViewBag.PersonGroupID', '@item.Id', '@item.CompleteName')">Delete</a>
+        </td>
+    </tr>
+}
