@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Try";
+}
+
+<h2>Try</h2>
+
+@using (Html.BeginForm("Index", "Try", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal">
+        <h4>Person</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.Label("PersonGroupID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("PersonGroupID", (IEnumerable<SelectListItem>)ViewBag.PersonGroups, new { ID = "PersonGroupID", onchange = "searchPersons()", htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("File", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="File" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Try" class="btn btn-default" multiple />
+            </div>
+        </div>
+
+        <hr />
+
+        @if (ViewBag.Identities != null)
+        {
+            @:
+            <div class="form-group">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Face ID</th>
+                            <th>Person ID</th>
+                            <th>% Coincidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Microsoft.ProjectOxford.Face.Contract.IdentifyResult identity in ViewBag.Identities)
+                        {
+                            <tr>
+                                <td>@identity.FaceId.ToString()</td>
+                                @foreach (var candidate in identity.Candidates)
+                                {
+                                    <td>@candidate.PersonId.ToString()</td>
+                                    <td>@candidate.Confidence</td>
+                                }
+                                <td></td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        }
+    </div>
+}
+
