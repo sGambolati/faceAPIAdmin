@@ -1,15 +1,15 @@
-﻿
+﻿@model List<FaceRecMVC.Models.FaceDetectedViewModel>
 @{
     ViewBag.Title = "Try";
 }
 
 <h2>Try</h2>
 
-@using (Html.BeginForm("Index", "Try", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <div class="form-horizontal">
-        <h4>Person</h4>
-        <hr />
+<div class="form-horizontal">
+    <h4>Person</h4>
+    <hr />
+    @using (Html.BeginForm("Index", "Try", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group">
@@ -22,7 +22,7 @@
         <div class="form-group">
             @Html.Label("File", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="file" name="File" />
+                <input type="file" name="FileTry" id="tryRow_0" />
             </div>
         </div>
 
@@ -31,39 +31,45 @@
                 <input type="submit" value="Try" class="btn btn-default" multiple />
             </div>
         </div>
+    }
+    <hr />
 
-        <hr />
+    @if (ViewBag.ImageResult != null)
+    {
+        <div class="form-group">
+            <img src="@ViewBag.ImageResult" height="400" />
+        </div>
+    }
 
-        @if (ViewBag.Identities != null)
-        {
-            @:
-            <div class="form-group">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Face ID</th>
-                            <th>Person ID</th>
-                            <th>% Coincidence</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (Microsoft.ProjectOxford.Face.Contract.IdentifyResult identity in ViewBag.Identities)
+    @if (Model != null)
+    {
+        @:
+        <div class="form-group">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Face ID</th>
+                        <th>Person ID</th>
+                        <th>% Coincidence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var face in Model)
+                    {
+                        foreach (var person in face.PersonDetected)
                         {
                             <tr>
-                                <td>@identity.FaceId.ToString()</td>
-                                @foreach (var candidate in identity.Candidates)
-                                {
-                                    <td>@candidate.PersonId.ToString()</td>
-                                    <td>@candidate.Confidence</td>
-                                }
-                                <td></td>
+                                <td>@face.FaceID <div style="width:32px;height:32px;background-color: rgb(@face.RectColor.R,@face.RectColor.G, @face.RectColor.B)"></div></td>
+                                <td>@person.PersonName (@person.PersonID)</td>
+                                <td>@person.Coincidence %</td>
                             </tr>
                         }
-                    </tbody>
+                    }
+                </tbody>
 
-                </table>
-            </div>
-        }
-    </div>
-}
+            </table>
+        </div>
+    }
+</div>
+
 

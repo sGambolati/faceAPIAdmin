@@ -12,19 +12,19 @@
     <div class="col-md-4">
         <h2>Getting started</h2>
         <p>Review the Persons groups.</p>
-        @Html.ActionLink("View Person Groups", "Index", "PersonGroup", new { @class = "btn btn-default" })
+        @Html.ActionLink("View Person Groups", "Index", "PersonGroup", null, new { @class = "btn btn-default" })
         @*<p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>*@
     </div>
     <div class="col-md-4">
         <h2>Add Persons</h2>
         <p>Adding persons requires only a Name who identify the person and pick a Person Group.</p>
-        @Html.ActionLink("View persons", "Index", "Person", new { @class = "btn btn-default" })
+        @Html.ActionLink("View persons", "Index", "Person", null, new { @class = "btn btn-default" })
         @*<p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">View persons &raquo;</a></p>*@
     </div>
     <div class="col-md-4">
         <h2>Try it!</h2>
         <p>You can try the Face Identiy API uploading a picture and view the faces detected and the persons identified.</p>
-        @Html.ActionLink("Try it", "Index", "Try", new { @class = "btn btn-default" })
+        @Html.ActionLink("Try it", "Index", "Try", null, new { @class = "btn btn-default" })
         @*<p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>*@
     </div>
 </div>
